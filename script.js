@@ -6,6 +6,10 @@ function getComputerChoice() {
     return computerChoice;
 }
 
+function printComputerChoice(computerSelection) {
+    console.log(`Computer choice is ${computerSelection.charAt(0).toUpperCase() +   computerSelection.slice(1)}.`);
+}
+
 let computerSelection = ';'
 
 function playRound(playerSelection, computerSelection) {
@@ -13,7 +17,9 @@ function playRound(playerSelection, computerSelection) {
     computerSelection = getComputerChoice();
     playerSelection = playerSelection.toLowerCase();
     console.log(`Player choice is ${playerSelection.charAt(0).toUpperCase() + playerSelection.slice(1)}.`);
-        console.log(`Computer choice is ${computerSelection.charAt(0).toUpperCase() +   computerSelection.slice(1)}.`);
+    if (RPS.includes(playerSelection)) {
+        printComputerChoice(computerSelection);
+    }
     switch (playerSelection) {
         case 'rock':
             if (computerSelection === 'rock') {
@@ -66,9 +72,12 @@ function playGame(playerSelection, computerSelection) {
             playerScore++;
             console.log(`Player Score = ${playerScore}, Computer Score = ${computerScore}`);
         }
-        else {
+        else if (gameResults.includes('You lose!')) {
             computerScore++;
             console.log(`Player Score = ${playerScore}, Computer Score = ${computerScore}`);
+        }
+        else {
+            i--;
         }
     }
     if (playerScore > computerScore) {
