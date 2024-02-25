@@ -22,9 +22,8 @@ function printComputerChoice(computerSelection) {
 
 let computerSelection = '';
 
-function playRound(playerSelection, computerSelection) {
-    // playerSelection = prompt("Please type 'rock', 'paper', or 'scissors': ");
-    computerSelection = getComputerChoice();
+function playRound(playerSelection) {
+    let computerSelection = getComputerChoice();
     playerSelection = playerSelection.toLowerCase();
     playerSelectionP.textContent = `Player choice is ${playerSelection.charAt(0).toUpperCase() + playerSelection.slice(1)}.`;
     if (RPS.includes(playerSelection)) {
@@ -69,42 +68,46 @@ function playRound(playerSelection, computerSelection) {
         }
 }
 
-let roundResults = null;
-
-function playGame(roundResults, computerSelection) {
+function playGame() {
     let computerScore = 0;
     let playerScore = 0;
+    let roundResults = '';
+    let gameResults = '';
+    let gameCount = 0;
+ 
     rpsButtons.forEach((button) => {
         button.addEventListener('click', function (e) {
-            roundResults = playRound(e.target.id, computerSelection);
+            if ((playerScore < 5) && (computerScore < 5)) {    
+                roundResults = playRound(e.target.id);
+                roundResultsP.textContent = `Round Results: ${roundResults}`;
+                if (roundResults.includes('You tied!')) {
+                    scoreP.textContent = `Player Score = ${playerScore}, Computer Score = ${computerScore}`;
+                }
+                else if (roundResults.includes('You win!')) {
+                    playerScore++;
+                    scoreP.textContent = `Player Score = ${playerScore}, Computer Score = ${computerScore}`;
+                }
+                else {
+                    computerScore++;
+                    scoreP.textContent = `Player Score = ${playerScore}, Computer Score = ${computerScore}`;
+                };
+                gameCount++;
+            }
+            if (playerScore > computerScore) {
+                gameResults = "You win!";
+            }
+            else if (computerScore > playerScore) {
+                gameResults = "You lose!";
+            }
+            else {
+                gameResults = "You tied!";
+            };
+            if ((playerScore === 5) || (computerScore === 5)) {
+                gameResultsP.textContent = `Game Result: ${gameResults}`;
+            };
+        
         });
-    });
-    for (let i = 1; i <= 5; i++) {    
-        roundResultsP.textContent = `${roundResults}`;
-        if (roundResults.includes('You tied!')) {
-            scoreP.textContent = `Player Score = ${playerScore}, Computer Score = ${computerScore}`;
-        }
-        else if (roundResults.includes('You win!')) {
-            playerScore++;
-            scoreP.textContent = `Player Score = ${playerScore}, Computer Score = ${computerScore}`;
-        }
-        else if (roundResults.includes('You lose!')) {
-            computerScore++;
-            scoreP.textContent = `Player Score = ${playerScore}, Computer Score = ${computerScore}`;
-        }
-        else {
-            i--;
-        }
-    }
-    if (playerScore > computerScore) {
-        gameResultsP.textContent = "You win!";
-    }
-    else if (computerScore > playerScore) {
-        gameResultsP.textContent = "You lose!";
-    }
-    else {
-        gameResultsP.textContent = "You tied!";
-    }
+    })
 }
 
-playGame(playerSelection, computerSelection);
+playGame();
