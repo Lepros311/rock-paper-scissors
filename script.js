@@ -1,3 +1,13 @@
+const rock = document.querySelector('#btn-rock');
+const paper = document.querySelector('#btn-paper');
+const scissors = document.querySelector('#btn-scissors');
+const rpsButtons = document.querySelectorAll('.rps-btn');
+const playerSelectionP = document.querySelector('.player-selection-p');
+const computerSelectionP = document.querySelector('.computer-selection-p');
+const roundResultsP = document.querySelector('.round-results-p');
+const scoreP = document.querySelector('.score-p');
+const gameResultsP = document.querySelector('.game-results-p');
+
 const RPS = ['rock', 'paper', 'scissors'];
 let playerSelection = '';
 
@@ -7,16 +17,16 @@ function getComputerChoice() {
 }
 
 function printComputerChoice(computerSelection) {
-    console.log(`Computer choice is ${computerSelection.charAt(0).toUpperCase() +   computerSelection.slice(1)}.`);
+    computerSelectionP.textContent = `Computer choice is ${computerSelection.charAt(0).toUpperCase() +   computerSelection.slice(1)}.`;
 }
 
-let computerSelection = ';'
+let computerSelection = '';
 
 function playRound(playerSelection, computerSelection) {
-    playerSelection = prompt("Please type 'rock', 'paper', or 'scissors': ");
+    // playerSelection = prompt("Please type 'rock', 'paper', or 'scissors': ");
     computerSelection = getComputerChoice();
     playerSelection = playerSelection.toLowerCase();
-    console.log(`Player choice is ${playerSelection.charAt(0).toUpperCase() + playerSelection.slice(1)}.`);
+    playerSelectionP.textContent = `Player choice is ${playerSelection.charAt(0).toUpperCase() + playerSelection.slice(1)}.`;
     if (RPS.includes(playerSelection)) {
         printComputerChoice(computerSelection);
     }
@@ -59,35 +69,41 @@ function playRound(playerSelection, computerSelection) {
         }
 }
 
-function playGame(playerSelection, computerSelection) {
+let roundResults = null;
+
+function playGame(roundResults, computerSelection) {
     let computerScore = 0;
     let playerScore = 0;
-    for (let i = 1; i <= 5; i++) {
-        let gameResults = playRound(playerSelection, computerSelection);
-        console.log(gameResults);
-        if (gameResults.includes('You tied!')) {
-            console.log(`Player Score = ${playerScore}, Computer Score = ${computerScore}`);
+    rpsButtons.forEach((button) => {
+        button.addEventListener('click', function (e) {
+            roundResults = playRound(e.target.id, computerSelection);
+        });
+    });
+    for (let i = 1; i <= 5; i++) {    
+        roundResultsP.textContent = `${roundResults}`;
+        if (roundResults.includes('You tied!')) {
+            scoreP.textContent = `Player Score = ${playerScore}, Computer Score = ${computerScore}`;
         }
-        else if (gameResults.includes('You win!')) {
+        else if (roundResults.includes('You win!')) {
             playerScore++;
-            console.log(`Player Score = ${playerScore}, Computer Score = ${computerScore}`);
+            scoreP.textContent = `Player Score = ${playerScore}, Computer Score = ${computerScore}`;
         }
-        else if (gameResults.includes('You lose!')) {
+        else if (roundResults.includes('You lose!')) {
             computerScore++;
-            console.log(`Player Score = ${playerScore}, Computer Score = ${computerScore}`);
+            scoreP.textContent = `Player Score = ${playerScore}, Computer Score = ${computerScore}`;
         }
         else {
             i--;
         }
     }
     if (playerScore > computerScore) {
-        console.log("You win!");
+        gameResultsP.textContent = "You win!";
     }
     else if (computerScore > playerScore) {
-        console.log("You lose!");
+        gameResultsP.textContent = "You lose!";
     }
     else {
-        console.log("You tied!");
+        gameResultsP.textContent = "You tied!";
     }
 }
 
